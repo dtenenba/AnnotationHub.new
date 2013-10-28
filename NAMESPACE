@@ -1,0 +1,47 @@
+import(methods, GenomicRanges)
+
+importFrom(AnnotationDbi, exists, keys, keytypes, columns)
+
+importFrom(IRanges, DataFrame)
+
+import(BiocGenerics)
+
+importFrom(BiocInstaller, biocVersion)
+
+importFrom(utils, .DollarNames)
+
+importFrom(IRanges, metadata)
+
+importFrom(rjson, fromJSON)
+
+importFrom(stats, setNames)
+
+## export our S3 method.
+S3method(.DollarNames, AnnotationHub)
+
+exportMethods("$",
+              "[[",
+              "[",
+              as.list,
+              filters, "filters<-",
+              hubUrl,
+              hubCache, "hubCache<-",
+              hubResource,
+              keys,
+              keytypes,
+              columns,
+              length,
+              metadata,
+              names,
+              possibleDates,
+              show,
+              snapshotDate, "snapshotDate<-",
+              snapshotPaths,
+              snapshotUrl,
+              snapshotUrls,
+              snapshotVersion
+              )
+
+export(AnnotationHub,
+       ahinfo)
+
