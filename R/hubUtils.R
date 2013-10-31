@@ -32,6 +32,8 @@
 .parseJSON <- function(url, ...){
     ## process url to get rid of any spaces.
     url <- gsub(" ", "%20", url)
+    if (getOption("AnnotationHub.debug", FALSE))
+        .printf("Visiting %s", url)
     res <- fromJSON(file=url, ...)
     .na2na(res)
 }
@@ -71,13 +73,17 @@
     paste(.hostUrl(), "ah", sep="/")
 }
 
+.clientVersion <- function() {
+    as.character(packageVersion("AnnotationHub"))
+}
+
 .snapshotPaths <- function(snapshotUrl) {
     url <- paste(snapshotUrl, "getAllResourcePaths", sep="/")
     urls <- .parseJSON(url)
     setNames(urls, make.names(urls))
 }
 
-.snapshotVersion <- function() biocVersion()
+.snapshotVersion <- function() paste(biocVersion(), .clientVersion(), sep="/")
 
 .snapshotDate <- function(hubUrl, snapshotVersion) {
     url <- paste(hubUrl, snapshotVersion, "getLatestSnapshotDate",
@@ -214,7 +220,7 @@ setMethod("possibleDates", "missing", function(x, ...) {
 }
 
 .hubResource <- function(hubUrl, path=character()) {
-    file <- paste(hubUrl, "resources", sep="/")
+    file <- paste(hubUrl, .snapshotVersion(), "resources", sep="/")
     if (length(path))
         file <- paste(file, path, sep="/")
     file
